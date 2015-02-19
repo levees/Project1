@@ -42,3 +42,27 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+
+##### User define gems
+
+# Use mysql2 as the database for Active Record
+gem 'mysql2'
+# Devise
+gem 'devise'
+# Bootstrap sass
+gem 'bootstrap-sass', '~> 3.2.0.2'
+# Underscore
+gem 'underscore-rails', '~> 1.7.0'
+# Font-Awesome
+gem 'font-awesome-rails', '~> 4.2.0.0'
+# PaperClip
+gem "paperclip", "~> 4.2"
+# WillPaginate
+gem 'will_paginate', '~> 3.0'
+gem 'will_paginate-bootstrap'
+# Jquery File uploader
+gem 'jquery-fileupload-rails'
+# AngularJS
+gem 'bower-rails'
+gem 'angularjs-rails'
