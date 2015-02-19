@@ -1,0 +1,117 @@
+<div class="content-head">
+  <h4><i class="fa fa-<%= @menu_icon %>"></i> 사진 업로드 <i class="fa fa-at"></i> <%= @menu_title %></h4>
+</div>
+<hr />
+
+<div class="content-view">
+  <%= form_for Photo.new, :html => { :multipart => true, :id => "fileupload"  } do |f| %>
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <div class="fileupload-buttonbar">
+      <div class="span7">
+        <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn-success fileinput-button">
+          <i class="icon-plus icon-white"></i>
+          <span>파일 추가</span>
+          <%= f.file_field :photo, multiple: true %>
+        </span>
+        <button type="submit" class="btn btn-primary start">
+          <i class="icon-upload icon-white"></i>
+          <span>전체 업로드</span>
+        </button>
+      </div>
+      <div class="span5">
+        <!-- The global progress bar -->
+        <div class="progress progress-success progress-striped active fade">
+          <div class="bar" style="width:0%;"></div>
+        </div>
+      </div>
+    </div>
+    <!-- The loading indicator is shown during image processing -->
+    <div class="fileupload-loading"></div>
+    <br>
+    <!-- The table listing the files available for upload/download -->
+    <table class="table table-striped">
+      <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+    </table>
+    <div class="form-group">
+      <a href="/gallery/<%= params[:id] %>" class="btn btn-success btn-lg">업로드 완료</a>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  var fileUploadErrors = {
+    maxFileSize: 'File is too big',
+    minFileSize: 'File is too small',
+    acceptFileTypes: 'Filetype not allowed',
+    maxNumberOfFiles: 'Max number of files exceeded',
+    uploadedBytes: 'Uploaded bytes exceed file size',
+    emptyResult: 'Empty file upload result'
+  };
+</script>
+
+<!-- IMPORTANT fade class makes fileupload depend on css transition effect REMOVE or RENAME it -->
+<script id="template-upload" type="text/html">
+  {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+  <tr class="template-upload nofade">
+    <td class="preview"><span class="nofade"></span></td>
+    <td class="name">{%=file.name%}</td>
+    <td class="size">{%=o.formatFileSize(file.size)%}</td>
+    {% if (file.error) { %}
+    <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+    {% } else if (o.files.valid && !i) { %}
+    <td class="progress"><div class="progressbar"><div style="width:0%;"></div></div></td>
+    <td class="start">{% if (!o.options.autoUpload) { %}<button class="btn primary"><%= t('photos.template.start') %></button>{% } %}</td>
+    {% } else { %}
+    <td colspan="2"></td>
+    {% } %}
+    <td class="cancel">{% if (!i) { %}<button class="btn info"><%= t('photos.template.cancel') %></button>{% } %}</td>
+  </tr>
+  {% } %}
+</script>
+<script id="template-download" type="text/html">
+  {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+  <tr class="template-download nofade">
+    {% if (file.error) { %}
+    <td></td>
+    <td class="name">{%=file.name%}</td>
+    <td class="size">{%=o.formatFileSize(file.size)%}</td>
+    <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+    {% } else { %}
+    <td class="preview">{% if (file.thumbnail_url) { %}
+      <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery"><img src="{%=file.thumbnail_url%}"></a>
+    {% } %}</td>
+    <td class="name">
+      <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}">{%=file.name%}</a>
+    </td>
+    <td class="size">{%=o.formatFileSize(file.size)%}</td>
+    <td colspan="2"></td>
+    {% } %}
+    <td class="delete">
+    <button class="btn danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"><%= t('photos.template.delete') %></button>
+    <!--<input type="checkbox" name="delete" value="1">-->
+    </td>
+  </tr>
+  {% } %}
+</script>
+
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        // Initialize the jQuery File Upload widget:
+        $('#fileupload').fileupload();
+        // 
+
+        $.ajax({
+          url: $('#fileupload').attr('action'),
+          dataType: 'json',
+          context: $('#fileupload')[0]
+        }).done(function (result) {
+          $(this)
+          .removeClass('fileupload-processing')
+          .fileupload('option', 'done')
+          .call(this, null, {result: result});
+        });
+
+    });
+</script>

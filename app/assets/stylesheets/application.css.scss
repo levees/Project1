@@ -1,0 +1,99 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ * require bootstrap
+ * require font-awesome
+ * require redactor
+ * require magnific-popup
+ * require jquery.fileupload-ui
+ * require_tree .
+ * require_self
+ */
+
+@import "bootstrap";
+@import "font-awesome";
+@import "redactor";
+@import "magnific-popup";
+@import "jquery.fileupload-ui";
+@import "communities";
+body { background-color: white; }
+
+header.gnb { 
+  position: absolute;
+  top: 0;
+  width: 100%;
+  border-radius: 0;
+  background-color:rgba(225,225,225,.8); 
+  -webkit-box-shadow: 0px 1px 1px rgba(200,200,200,.3); 
+  -moz-box-shadow: 0px 1px 1px rgba(200,200,200,.3); 
+  box-shadow: 0px 1px 1px rgba(200,200,200,.3); 
+}
+
+.navbar-brand { color: #ededed; text-shadow: 0px 2px 3px #000; }
+.navbar-brand:hover { color: #fff; }
+.nav { background: transparent; }
+.nav li a { color: white; text-shadow: 0px 2px 3px #111; }
+.nav li a:hover { background-color: transparent; color:#cecece; }
+.icon-bar { background-color: white; box-shadow: 0px 1px 1px #333; }
+
+a { 
+  color: #2a8f1e; 
+  &:hover { color: #27661d; }
+}
+
+.main-picture { margin-top: 0; height: 300px; background:url(/assets/top_photo1.jpg); background-position: center; background-size: auto; background-repeat: no-repeat; border-bottom: 1px solid #999; -webkit-box-shadow: 0px 3px 5px #aaa; -moz-box-shadow: 0px 3px 5px #aaa; box-shadow: 0px 3px 5px #aaa; }
+.page { padding:30px 0 50px; }
+
+.right-section {
+  hr { clear:both; margin: 10px 0; }
+
+  .login-info {
+    padding-top: 5px;
+    a { font-size: 12px; color: #454545;}
+    form { float:left; margin: 5px 0 10px; }
+    input[type=password] { margin-top: 5px; }
+    .mt-10 { margin-top: 10px; }
+    .login-btn-box {
+      padding: 0px;
+      .btn-login { margin: 0; min-height: 65px; }
+    }
+    .rememberme { 
+      margin-top: 5px; 
+      font-size: 12px;
+      label { font-weight: normal; color:#666; }
+    }
+  }
+
+  .menu { 
+    list-style: none; 
+    padding: 0 10px; 
+
+    li { padding: 3px; 
+
+      a { 
+        font-size: 100%; 
+        color: #666;
+        &:hover { color: #2a8f1e; }
+      }
+    }
+  }
+}
+
+
+footer {
+  margin: 50px 0 0;
+  padding: 20px 0 0;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  border-top: 1px solid #eee;
+}

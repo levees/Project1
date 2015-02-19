@@ -1,14 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="GoodFriends">
 <head>
-  <title>Project1</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Good Friends</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <link rel="shortcut icon" href="/assets/favicon.ico" />
+  <script src="/assets/redactor/redactor.js"></script>
+  <script src="/assets/redactor/plugins/table/table.js"></script>
+  <script src="/assets/redactor/plugins/video/video.js"></script>
 </head>
 <body>
+  <header class="navbar gnb affix" id="gnb" role="banner">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="/" class="navbar-brand">Good Friends</a>
+      </div>
+      <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="/notice">공지사항</a>
+          </li>
+          <li>
+            <a href="/information">산행안내</a>
+          </li>
+          <li>
+            <a href="/review">산행후기</a>
+          </li>
+          <li>
+            <a href="/gallery">갤러리</a>
+          </li>
+          <li>
+            <a href="/board">게시판</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-<%= yield %>
+  <div id="main_picture" class="main-picture"></div>
 
+
+  <!-- Docs page layout -->
+  <div class="page" id="content">
+    <div class="container">
+      <div class="col-md-9">
+        <% if notice %>
+          <p class="alert alert-success"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="alert alert-danger"><%= alert %></p>
+        <% end %>
+
+        <%= yield %>
+      </div>
+      <div class="col-md-3 right-section">
+        <hr />
+        <div class="login-info row">
+          <% if user_signed_in? %>
+            <div class="col-xs-12">
+              반갑습니다 <strong><%= (user_signed_in?) ? current_user.username : "Guest" %></strong> 님.
+              <%= link_to "로그아웃", destroy_user_session_path, method: :delete, class: 'btn btn-xs btn-default pull-right'  %>
+            </div>
+            <div class="col-xs-12 mt-10">
+              <%= link_to edit_user_registration_path, :class => 'navbar-link' do %>
+                <i class="fa fa-info-circle"></i> 회원정보 수정
+              <% end %>
+            </div>
+          <% else %>
+
+            <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+              <div class="col-xs-9">
+                  <div><%= f.email_field :email, autofocus: true, class: "form-control input-sm", placeholder: "이메일 주소", tabindex: "1" %></div>
+
+                  <div><%= f.password_field :password, autocomplete: "off", class: "form-control input-sm", placeholder: "비밀번호", tabindex: "2" %></div>
+              </div>
+              <div class="col-xs-3 login-btn-box">
+                <%= f.submit "로그인", class: "btn btn-success btn-login", tabindex: "3" %>
+              </div>
+
+              <div class="col-md-12">
+                <% if devise_mapping.rememberable? -%>
+                  <div class="rememberme">
+                    <%= f.label :remember_me do %><%= f.check_box :remember_me %> 이메일 저장<% end %></div>
+                <% end -%>
+                <div class="pull-right">
+                  <%= link_to "회원가입", new_registration_path(resource_name) %> | 
+                  <%= link_to "비밀번호 찾기", new_password_path(resource_name) %>
+              </div>
+            <% end %> 
+
+          <% end %>
+        </div>
+        <hr />
+        <div>
+          <ul class="menu">
+            <li><a href="/notice"><i class="fa fa-bullhorn"></i> 공지사항</a></li>
+            <li><a href="/information"><i class="fa fa-info-circle"></i> 산행안내</a></li>
+            <li><a href="/review"><i class="fa fa-book"></i> 산행후기</a></li>
+            <li><a href="/gallery"><i class="fa fa-photo"></i> 갤러리</a></li>
+            <li><a href="/board"><i class="fa fa-coffee"></i> 게시판</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Good Friends @
+  </footer>
 </body>
+
+<script>
+$(document).ready(function() {
+  $("p[class^='alert']").fadeOut(2000);
+  var tmp_bgNum = Math.floor((Math.random() * 5) + 1);
+  $(".main-picture").css('background-image','url(/assets/top_photo'+tmp_bgNum+'.jpg)');
+})
+</script>
 </html>

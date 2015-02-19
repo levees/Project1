@@ -1,0 +1,71 @@
+<div class="content-head">
+  <h4><i class="fa fa-<%= @menu_icon %>"></i> <%= @menu_title %></h4>
+  <%= link_to '목록보기', community_articles_path(page: params[:page]), class: "btn btn-success" %>
+  <% if user_signed_in? && current_user.id == @article.user.id %>
+    <%= link_to '수정하기', edit_community_article_path(params[:community], @article, page: params[:page]), class: "btn btn-default" %>
+    <%#= link_to '삭제하기', community_article_path(params[:community], @article, page: params[:page]), method: :delete, confirm: "정말로 삭제하시겠습니까?", class: "btn btn-default" %>
+  <% end %>
+</div>
+<hr />
+
+<div class="content-view">
+  <article>
+    <header>
+      <h3>
+        <%= @article.title %>
+      </h3>
+      <div class="info">
+        <i class="fa fa-clock-o"></i> <%= @article.created_at.strftime("%B %m, %Y %H: %M") %> 
+        <i class="fa fa-comments"></i> <%= @article.community_article_comments.length %>
+        <i class="fa fa-user"></i> <strong><%= @article.user.username %></strong>
+      </div>
+    </header>
+    <hr />
+    <div class="article">
+      <%= @article.body.html_safe %>
+    </div>
+  </article>
+</div>
+
+
+<div class="content-comments">
+  <div class="comment-head">
+    <h4><i class="fa fa-comments"></i> Comments </h4>
+  </div>
+
+  <% if user_signed_in? %>
+  <div class="comment-post">
+    <form name="commentPost" id="comment_post" mehtod="post" action="/comment/<%= @article.id %>">
+      <div class="col-xs-10"><textarea name="comment" id="comment_body" placeholder="내용을 입력하세요."></textarea></div>
+      <div class="col-xs-2"><button type="submit" class="btn btn-default">저장하기</button></div>
+    </form>
+  </div>
+  <% end %>
+  <div id="comment_list" class="comment-list col-xs-12"></div>
+
+</div>
+<script>
+  $(document).ready(function() {
+    loadComments();
+
+    $('#comment_post').submit(function(event) {
+      $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        data: {'comment': $(this).find('#comment_body').val()},
+        success: function(data) {
+          console.log(data)
+          if (data.result) {
+            $('#comment_post')[0].reset();
+            loadComments();
+          }
+        }
+      })
+      event.preventDefault();
+    })
+  });
+  var loadComments = function() {
+    $('#comment_list').load('/comment/<%= params[:id] %>');
+  };
+</script>

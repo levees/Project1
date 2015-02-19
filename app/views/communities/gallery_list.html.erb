@@ -1,0 +1,53 @@
+<div class="content-head">
+  <h4><i class="fa fa-<%= @menu_icon %>"></i> <%= @menu_title %></h4>
+  <% if user_signed_in? %>
+    <%= link_to "새글쓰기", new_community_article_path(page: params[:page]), class: "btn btn-success" %>
+  <% end %>
+</div>
+<hr />
+
+<div class="content-list">
+  <div class="row">
+    <% if @articles.length > 0 %>
+      <% @articles.each_with_index do |article, index| %>
+        <% if (index % 3) == 0 %>
+  </div>
+  <div class="row">
+        <% end %>
+        <div class="col-sm-4 gallery-item">
+
+          <% if article.photos.length > 0 %>
+            <%= link_to community_article_path(params[:community], article, page: params[:page]) do %>
+              <%= image_tag("/gallery_images/thumb/#{article.photos[0].photo_file_name}", class: "img-responsive", alt: article.title) %>
+            <% end %>
+          <% else %>
+            <img src="http://placehold.it/700x400" class="img-responsive" />
+          <% end %>
+          <h4>
+            <%= link_to article.title, community_article_path(params[:community], article, page: params[:page]) %>
+          </h4>
+          <div class="info">
+            <i class="fa fa-user"></i> <strong><%= article.user.username %></strong>
+            <i class="fa fa-comments"></i> <%= article.community_article_comments.length %>
+          </div>
+          <p>
+            <%= strip_tags(article.body)[0..30] %>...
+          </p>
+        </div>
+      <% end %>
+    <% else %>
+      <article>
+        <header>
+          <h3 class="text-center">
+            게시물이 없습니다.
+          </h3>
+        </header>
+      </article>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="content-page">
+  <%= will_paginate @articles, renderer: BootstrapPagination::Rails, class: "pagination pagination-lg pull-right", :previous_label => '«', :next_label => '»' %>
+</div>

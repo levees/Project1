@@ -1,0 +1,46 @@
+<div class="content-head">
+  <h4><i class="fa fa-<%= @menu_icon %>"></i> 수정하기 <i class="fa fa-at"></i> <%= @menu_title %> </h4>
+  <%= link_to "취소하기", community_article_path(@community.community_path, @article, page: params[:page]), :class => "btn btn-default" %>
+</div>
+<hr />
+
+<%= form_for [@community, @article], url: community_article_path(params[:community], @article) do |f| %>
+  <% if @article.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@article.errors.count, "error") %> prohibited this bb from being saved:</h2>
+
+      <ul>
+      <% @article.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label "제목" %><br />
+    <%= f.text_field :title, type: :text, id: "title", class: "form-control", :'data-trigger' => "focus", required: "제목을 입력하세요.", placeholder: "제목" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label "내용" %><br />
+    <%= f.text_area :body, id: "editor", autocomplete: :off, class: "form-control editor", placeholder: "내용을 입력하세요.", rows: 10 %>
+  </div>
+
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-success btn-lg">저장하기</button>
+  </div>
+<% end %>
+
+
+<script>
+  $(document).ready(function() {
+    $('#editor').redactor({
+      buttonSource: true,
+      imageUpload: '/upload/image/',
+      //fileUpload: '/upload/file/',
+      plugins: ['table', 'video']
+    });
+  });
+</script>
